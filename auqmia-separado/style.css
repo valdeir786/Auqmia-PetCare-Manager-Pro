@@ -1,0 +1,271 @@
+:root {
+            --primary: #5aaa9e;
+            --primary-dark: #1e8374;
+            --primary-light: #d4f0ec;
+            --bg: #eef7f5;
+            --card: #fffdf6;
+            --yellow: #ffcb42;
+            --yellow-dark: #c99a00;
+            --purple: #a478d3;
+            --text: #2a3a38;
+            --text-muted: #7a9a97;
+            --danger: #ff5252;
+            --success: #3dcb7a;
+            --border: #e2ede9;
+            --sidebar-w: 250px;
+            /* categorias */
+            --cat-alimento: #e8793c;
+            --cat-higiene: #5aaa9e;
+            --cat-acessorio: #a478d3;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; display: flex; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
+
+        /* ───── SIDEBAR ───── */
+        nav {
+            width: var(--sidebar-w);
+            background: linear-gradient(180deg, #1e8374 0%, #146b5e 100%);
+            display: flex; flex-direction: column;
+            box-shadow: 3px 0 20px rgba(0,0,0,0.15);
+            flex-shrink: 0; overflow-y: auto;
+        }
+        .logo {
+            padding: 22px 20px 18px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+        .logo h1 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: #fff; letter-spacing: 1px; }
+        .logo p { font-size: 0.72rem; color: rgba(255,255,255,0.65); font-style: italic; margin-top: 3px; }
+
+        .profile-switcher { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+        .profile-switcher select {
+            background: rgba(0,0,0,0.25); color: white; border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 10px; border-radius: 8px; width: 100%; cursor: pointer; font-family: inherit; font-size: 0.85rem;
+        }
+        .profile-switcher select option { background: #1e8374; }
+
+        .nav-section { padding: 10px 16px 4px; font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1.5px; }
+
+        .nav-item {
+            padding: 11px 20px; color: rgba(255,255,255,0.8); cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.88rem; font-weight: 700; transition: all 0.2s;
+            border-left: 3px solid transparent; margin: 1px 0;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-item.active { background: rgba(255,255,255,0.15); border-left-color: var(--yellow); color: #fff; }
+        .nav-item .nav-icon { font-size: 1.1rem; width: 22px; text-align: center; }
+
+        .nav-bottom { margin-top: auto; border-top: 1px solid rgba(255,255,255,0.12); padding: 8px 0; }
+
+        /* ───── MAIN ───── */
+        main { flex: 1; overflow-y: auto; background: var(--bg); }
+
+        .page { display: none; padding: 28px; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+        /* ───── COMPONENTES ───── */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            background: var(--card); padding: 20px 24px; border-radius: 16px;
+            margin-bottom: 22px; box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .page-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--primary-dark); }
+        .page-header p { font-size: 0.82rem; color: var(--text-muted); margin-top: 3px; }
+
+        .panel { background: var(--card); padding: 20px 22px; border-radius: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); margin-bottom: 18px; }
+        .panel h3 { font-size: 0.95rem; color: var(--primary-dark); margin-bottom: 14px; font-weight: 800; }
+
+        /* ───── DASHBOARD ───── */
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+        .kpi-card {
+            background: var(--card); border-radius: 14px; padding: 18px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .kpi-card .kpi-label { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .kpi-card .kpi-value { font-family: 'DM Serif Display', serif; font-size: 1.9rem; color: var(--primary-dark); }
+        .kpi-card .kpi-sub { font-size: 0.75rem; color: var(--text-muted); }
+        .kpi-card.accent-yellow .kpi-value { color: var(--yellow-dark); }
+        .kpi-card.accent-purple .kpi-value { color: var(--purple); }
+        .kpi-card.accent-red .kpi-value { color: var(--danger); }
+
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .log-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+        .log-item:last-child { border-bottom: none; }
+        .log-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+        .log-dot.venda { background: var(--success); }
+        .log-dot.agenda { background: var(--yellow); }
+        .log-dot.estoque { background: var(--purple); }
+
+        /* ───── ALERTAS DE ESTOQUE ───── */
+        .alert-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 0.82rem; }
+        .alert-item.danger { background: #fff0f0; border-left: 3px solid var(--danger); }
+        .alert-item.warning { background: #fffbea; border-left: 3px solid var(--yellow); }
+
+        /* ───── FRENTE DE VENDAS ───── */
+        .vendas-layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
+
+        /* Tabs de categoria */
+        .cat-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .cat-tab {
+            padding: 8px 18px; border-radius: 30px; border: 2px solid transparent;
+            font-size: 0.82rem; font-weight: 800; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px; background: var(--bg);
+            color: var(--text-muted);
+        }
+        .cat-tab:hover { transform: translateY(-1px); }
+        .cat-tab.all.active   { background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+        .cat-tab.alimento.active { background: var(--cat-alimento); color: #fff; border-color: var(--cat-alimento); }
+        .cat-tab.higiene.active  { background: var(--cat-higiene);  color: #fff; border-color: var(--cat-higiene); }
+        .cat-tab.acessorio.active{ background: var(--cat-acessorio);color: #fff; border-color: var(--cat-acessorio); }
+
+        /* Barra de pesquisa */
+        .search-bar { display: flex; align-items: center; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; padding: 0 14px; margin-bottom: 16px; }
+        .search-bar input { border: none; background: transparent; padding: 10px 8px; flex: 1; font-family: inherit; font-size: 0.88rem; outline: none; color: var(--text); }
+        .search-bar span { color: var(--text-muted); font-size: 1rem; }
+
+        /* Seção de categoria na vitrine */
+        .cat-section { margin-bottom: 24px; }
+        .cat-section-title {
+            font-size: 0.72rem; font-weight: 900; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 10px; padding: 4px 10px;
+            border-radius: 6px; display: inline-block;
+        }
+        .cat-section-title.alimento { background: #fdeee6; color: var(--cat-alimento); }
+        .cat-section-title.higiene  { background: #dff0ee; color: var(--cat-higiene); }
+        .cat-section-title.acessorio{ background: #f0e8f7; color: var(--cat-acessorio); }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+        .product-card {
+            background: #f9f9f5; padding: 14px 10px; border-radius: 14px;
+            text-align: center; cursor: pointer; border: 2px solid transparent;
+            transition: all 0.2s; position: relative; overflow: hidden;
+        }
+        .product-card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.09); }
+        .product-card.alimento:hover { border-color: var(--cat-alimento); }
+        .product-card.higiene:hover  { border-color: var(--cat-higiene); }
+        .product-card.acessorio:hover{ border-color: var(--cat-acessorio); }
+        .product-card.sem-estoque { opacity: 0.45; cursor: not-allowed; }
+        .product-card .prod-icon { font-size: 2rem; margin-bottom: 6px; }
+        .product-card .prod-name { font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+        .product-card .prod-preco { font-size: 0.85rem; font-weight: 800; color: var(--primary-dark); }
+        .product-card .prod-estoque { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
+        .badge-cat {
+            position: absolute; top: 6px; right: 6px;
+            width: 8px; height: 8px; border-radius: 50%;
+        }
+        .badge-cat.alimento { background: var(--cat-alimento); }
+        .badge-cat.higiene  { background: var(--cat-higiene); }
+        .badge-cat.acessorio{ background: var(--cat-acessorio); }
+
+        /* Carrinho */
+        .carrinho-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.82rem;
+        }
+        .carrinho-item button { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
+        .carrinho-item button:hover { background: #fff0f0; }
+        .total-row { display: flex; justify-content: space-between; padding: 14px 0 0; font-size: 1.05rem; font-weight: 800; }
+        .total-row span:last-child { color: var(--primary-dark); font-size: 1.3rem; }
+
+        /* ───── ESTOQUE ───── */
+        .estoque-filtros { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+        .estoque-filtros select, .estoque-filtros input {
+            border: 1.5px solid var(--border); border-radius: 8px;
+            padding: 8px 12px; font-family: inherit; font-size: 0.83rem;
+            background: var(--card); color: var(--text); outline: none; width: auto;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); font-size: 0.72rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+        tr:hover td { background: #f7faf9; }
+        .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; }
+        .status-cheio   { background: #d6f5e5; color: #1a7a45; }
+        .status-medio   { background: #fff5d0; color: #7a5a00; }
+        .status-baixo   { background: #ffe0e0; color: #a00; }
+
+        /* ───── AGENDA ───── */
+        .agenda-status { padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 800; }
+        .st-ocorrendo { background: #fff4e0; color: #c07000; }
+        .st-certo     { background: #d6f5e5; color: #1a7a45; }
+        .st-errado    { background: #ffe0e0; color: #a00; }
+        .agenda-actions button { font-size: 0.72rem; padding: 4px 9px; border-radius: 5px; border: none; cursor: pointer; margin-right: 4px; font-weight: 700; }
+        .btn-ok  { background: #d6f5e5; color: #1a7a45; }
+        .btn-err { background: #ffe0e0; color: #a00; }
+        .btn-del { background: #eee; color: #666; }
+
+        /* ───── CLIENTES ───── */
+        .cliente-card {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 16px; border-radius: 10px; background: var(--bg);
+            margin-bottom: 8px; border: 1px solid var(--border);
+        }
+        .cliente-card .c-name { font-weight: 800; font-size: 0.9rem; }
+        .cliente-card .c-info { font-size: 0.77rem; color: var(--text-muted); margin-top: 2px; }
+        .cliente-card .c-badge { font-size: 0.7rem; font-weight: 800; background: var(--primary-light); color: var(--primary-dark); padding: 4px 10px; border-radius: 20px; }
+
+        /* ───── ÁREA DO CLIENTE ───── */
+        .historico-item { border-left: 3px solid var(--primary); padding: 10px 14px; margin-bottom: 10px; background: var(--bg); border-radius: 0 8px 8px 0; font-size: 0.83rem; }
+        .historico-item strong { color: var(--primary-dark); }
+
+        /* ───── BOTÕES ───── */
+        .btn { border: none; padding: 12px 20px; border-radius: 10px; color: white; font-weight: 800; cursor: pointer; font-family: inherit; font-size: 0.9rem; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+        .btn-block { display: flex; width: 100%; justify-content: center; margin-top: 10px; }
+        .btn-primary { background: var(--primary-dark); }
+        .btn-success { background: var(--success); }
+        .btn-danger  { background: var(--danger); }
+        .btn-gray    { background: #b0b0b0; color: white; }
+
+        /* ───── MODAL ───── */
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 98; backdrop-filter: blur(5px); }
+        .modal {
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 460px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+            background: white; border-radius: 20px; z-index: 100;
+            padding: 30px; box-shadow: 0 16px 50px rgba(0,0,0,0.2);
+        }
+        .modal h3 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--primary-dark); margin-bottom: 18px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+            border-radius: 9px; font-family: inherit; font-size: 0.88rem;
+            color: var(--text); outline: none; transition: border-color 0.2s; background: var(--bg);
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); background: white; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .modal-close { float: right; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted); margin-top: -8px; }
+
+        /* QR Code */
+        .qr-wrap { background: #f5f5f5; border-radius: 16px; padding: 20px; text-align: center; margin: 16px 0; }
+        .qr-mock { display: inline-block; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        /* Método pag */
+        .pag-metodos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+        .pag-btn { padding: 16px 10px; border-radius: 12px; border: 2px solid var(--border); background: var(--bg); cursor: pointer; text-align: center; font-weight: 800; font-size: 0.85rem; transition: all 0.2s; font-family: inherit; color: var(--text); }
+        .pag-btn:hover, .pag-btn.sel { border-color: var(--primary); background: var(--primary-light); color: var(--primary-dark); }
+        .pag-btn .pag-icon { font-size: 1.5rem; display: block; margin-bottom: 6px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+        /* Relatórios */
+        .relatorio-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .relatorio-row:last-child { border: none; }
+        .relatorio-row .r-label { color: var(--text-muted); }
+        .relatorio-row .r-val { font-weight: 800; }
+
+        @media (max-width: 900px) {
+            nav { width: 200px; }
+            .kpi-grid { grid-template-columns: 1fr 1fr; }
+            .vendas-layout { grid-template-columns: 1fr; }
+        }

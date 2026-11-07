@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auqmia - PetCare Manager Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="closeModals()"></div>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<nav id="sidebar">
+    <div class="logo" onclick="switchPage('dashboard', 'nav-dash')">
+        <h1>🐾 Auqmia</h1>
+        <p>"Luxo para quem late!"</p>
+    </div>
+
+    <div class="profile-switcher">
+        <select id="user-profile" onchange="changeProfile()">
+            <option value="dono">👑 Admin / Dono</option>
+            <option value="estoquista">📦 Estoquista</option>
+            <option value="recepcionista">📞 Recepcionista</option>
+        </select>
+    </div>
+
+    <div class="nav-section">Operações</div>
+    <div class="nav-item active" id="nav-dash"       onclick="switchPage('dashboard','nav-dash')">       <span class="nav-icon">🏠</span> Dashboard</div>
+    <div class="nav-item"        id="nav-vendas"     onclick="switchPage('vendas','nav-vendas')">         <span class="nav-icon">💰</span> Frente de Vendas</div>
+    <div class="nav-item"        id="nav-estoque"    onclick="switchPage('estoque','nav-estoque')">       <span class="nav-icon">📦</span> Estoque Central</div>
+
+    <div class="nav-section">Gestão</div>
+    <div class="nav-item"        id="nav-agenda"     onclick="switchPage('agenda','nav-agenda')">         <span class="nav-icon">📅</span> Agenda Master</div>
+    <div class="nav-item"        id="nav-clientes"   onclick="switchPage('clientes-base','nav-clientes')"><span class="nav-icon">🐕</span> Base de Clientes</div>
+    <div class="nav-item"        id="nav-relatorios" onclick="switchPage('relatorios','nav-relatorios')"> <span class="nav-icon">📊</span> Relatórios</div>
+
+    <div class="nav-bottom">
+        <div class="nav-item" id="nav-cliente-area" onclick="switchPage('login-cliente','nav-cliente-area')"><span class="nav-icon">👤</span> Área do Cliente</div>
+    </div>
+</nav>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main>
+
+<!-- ── DASHBOARD ── -->
+<section id="dashboard" class="page active">
+    <div class="page-header">
+        <div>
+            <h2>Painel Principal</h2>
+            <p>Bem-vindo(a)! Aqui está o resumo do dia — <span id="data-hoje"></span></p>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.8rem; background:var(--primary-light); color:var(--primary-dark); padding:6px 14px; border-radius:20px; font-weight:800;" id="perfil-badge">👑 Dono</span>
+        </div>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <span class="kpi-label">Faturamento Total</span>
+            <span class="kpi-value" id="kpi-faturamento">R$ 0</span>
+            <span class="kpi-sub">Todas as vendas registradas</span>
+        </div>
+        <div class="kpi-card accent-yellow">
+            <span class="kpi-label">Vendas Hoje</span>
+            <span class="kpi-value" id="kpi-vendas-hoje">0</span>
+            <span class="kpi-sub">Transações concluídas</span>
+        </div>
+        <div class="kpi-card accent-purple">
+            <span class="kpi-label">Agendamentos</span>
+            <span class="kpi-value" id="kpi-agendamentos">0</span>
+            <span class="kpi-sub">Total cadastrados</span>
+        </div>
+        <div class="kpi-card accent-red">
+            <span class="kpi-label">Alertas de Estoque</span>
+            <span class="kpi-value" id="kpi-alertas">0</span>
+            <span class="kpi-sub">Itens abaixo do mínimo</span>
+        </div>
+    </div>
+
+    <div class="dash-grid">
+        <div class="panel">
+            <h3>📋 Movimentação Recente</h3>
+            <div id="log-movimentacao"><p style="color:var(--text-muted);font-size:0.82rem;">Nenhuma movimentação ainda.</p></div>
+        </div>
+        <div>
+            <div class="panel">
+                <h3>⚠️ Alertas de Estoque Baixo</h3>
+                <div id="alerta-estoque-painel"><p style="color:var(--text-muted);font-size:0.82rem;">Tudo em ordem.</p></div>
+            </div>
+            <div class="panel">
+                <h3>📅 Próximos Agendamentos</h3>
+                <div id="proximos-agendamentos"><p style="color:var(--text-muted);font-size:0.82rem;">Nenhum agendamento.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── VENDAS ── -->
+<section id="vendas" class="page">
+    <div class="page-header">
+        <div><h2>Frente de Caixa</h2><p>Selecione produtos e finalize a venda</p></div>
+    </div>
+
+    <div class="vendas-layout">
+        <!-- VITRINE -->
+        <div>
+            <div class="panel" style="padding-bottom: 8px;">
+                <!-- Barra de busca -->
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" id="busca-produto" placeholder="Buscar produto..." oninput="renderGallery()">
+                </div>
+
+                <!-- Tabs de categoria -->
+                <div class="cat-tabs">
+                    <button class="cat-tab all active"       onclick="setCategoria('todas',this)">🛒 Todos</button>
+                    <button class="cat-tab alimento"         onclick="setCategoria('alimento',this)">🦴 Alimentação</button>
+                    <button class="cat-tab higiene"          onclick="setCategoria('higiene',this)">🧼 Higiene & Saúde</button>
+                    <button class="cat-tab acessorio"        onclick="setCategoria('acessorio',this)">🎀 Acessórios</button>
+                </div>
+            </div>
+
+            <!-- Galeria -->
+            <div id="vitrine-container"></div>
+        </div>
+
+        <!-- CARRINHO -->
+        <div class="panel" style="position: sticky; top: 0; max-height: calc(100vh - 80px); display:flex; flex-direction:column;">
+            <h3>🛒 Carrinho</h3>
+            <div id="carrinho-itens" style="flex:1; overflow-y:auto; min-height:120px;"></div>
+            <div id="carrinho-vazio" style="color:var(--text-muted); font-size:0.82rem; padding: 20px 0; text-align:center;">Nenhum item adicionado.</div>
+            <hr style="border:none; border-top:1px solid var(--border); margin: 12px 0;">
+            <div class="total-row"><span>Total</span><span id="total-venda">R$ 0,00</span></div>
+            <button class="btn btn-success btn-block" onclick="abrirPagamento()" style="margin-top:14px;">Finalizar Venda →</button>
+            <button class="btn btn-block" style="background:#f0f0f0; color:var(--text-muted); margin-top:6px;" onclick="limparCarrinho()">Limpar Carrinho</button>
+        </div>
+    </div>
+</section>
+
+<!-- ── ESTOQUE ── -->
+<section id="estoque" class="page">
+    <div class="page-header">
+        <div><h2>Inventário</h2><p>Gerencie produtos e quantidades em tempo real</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-novo-item')">+ Novo Produto</button>
+    </div>
+    <div class="panel">
+        <div class="estoque-filtros">
+            <input type="text" id="busca-estoque" placeholder="🔍  Buscar produto..." oninput="renderEstoque()" style="width:220px;">
+            <select id="filtro-cat-estoque" onchange="renderEstoque()">
+                <option value="">Todas as categorias</option>
+                <option value="alimento">🦴 Alimentação</option>
+                <option value="higiene">🧼 Higiene & Saúde</option>
+                <option value="acessorio">🎀 Acessórios</option>
+            </select>
+            <select id="filtro-status-estoque" onchange="renderEstoque()">
+                <option value="">Todos os status</option>
+                <option value="cheio">✅ Cheio</option>
+                <option value="medio">⚠️ Médio</option>
+                <option value="baixo">🔴 Baixo</option>
+            </select>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th><th>Categoria</th><th>Qtd</th><th>Mín.</th><th>Status</th><th>Preço</th><th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="estoque-body"></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ── AGENDA ── -->
+<section id="agenda" class="page">
+    <div class="page-header">
+        <div><h2>Agenda Master</h2><p>Gerencie todos os atendimentos e consultas</p></div>
+        <button class="btn btn-primary" onclick="openModal('modal-agenda')">+ Novo Agendamento</button>
+    </div>
+    <div class="panel">
+        <div class="estoque-filtros" style="margin-bottom:14px;">
+            <select id="filtro-status-agenda" onchange="renderAgenda()">
+                <option value="">Todos os status</option>
+                <option value="Ocorrendo">🟡 Ocorrendo</option>
+                <option value="Deu Certo">🟢 Deu Certo</option>
+                <option value="Errado">🔴 Errado</option>
+            </select>
+            <select id="filtro-prof-agenda" onchange="renderAgenda()">
+                <option value="">Todos os profissionais</option>
+                <option>Dr. Roberto (Veterinário)</option>
+                <option>Dra. Juliana (Vacinas)</option>
+                <option>Lucas (Esteticista/Tosa)</option>
+                <option>Mariana (Banhista)</option>
+            </select>
+        </div>
+        <table>
+            <thead><tr><th>Data/Hora</th><th>Tutor</th><th>Pet</th><th>Serviço</th><th>Profissional</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody id="agenda-body"></tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ── BASE DE CLIENTES ── -->
+<section id="clientes-base" class="page">
+    <div class="page-header">
+        <div><h2>Base de Clientes</h2><p>Tutores e pets cadastrados automaticamente via agendamento</p></div>
+    </div>
+    <div class="panel">
+        <div class="search-bar" style="margin-bottom:16px; max-width:400px;">
+            <span>🔍</span>
+            <input type="text" id="busca-cliente" placeholder="Buscar por nome ou CPF..." oninput="renderClientesBase()">
+        </div>
+        <div id="lista-clientes-geral"></div>
+    </div>
+</section>
+
+<!-- ── RELATÓRIOS ── -->
+<section id="relatorios" class="page">
+    <div class="page-header">
+        <div><h2>Relatórios</h2><p>Visão geral do desempenho financeiro e operacional</p></div>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:18px;">
+        <div class="panel">
+            <h3>💰 Financeiro</h3>
+            <div id="rel-financeiro"></div>
+        </div>
+        <div class="panel">
+            <h3>📦 Estoque</h3>
+            <div id="rel-estoque"></div>
+        </div>
+        <div class="panel">
+            <h3>📅 Agendamentos por Profissional</h3>
+            <div id="rel-profissional"></div>
+        </div>
+        <div class="panel">
+            <h3>🐾 Serviços mais Agendados</h3>
+            <div id="rel-servicos"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ── ÁREA DO CLIENTE ── -->
+<section id="login-cliente" class="page">
+    <div style="max-width:420px; margin: 40px auto;">
+        <div class="panel" id="tutor-login-box" style="text-align:center;">
+            <div style="font-size:3rem; margin-bottom:10px;">🐾</div>
+            <h2 style="font-family:'DM Serif Display',serif; color:var(--primary-dark); margin-bottom:6px;">Portal do Tutor</h2>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:20px;">Acesse seu histórico e agendamentos</p>
+            <div class="form-group">
+                <label>CPF (somente números)</label>
+                <input type="text" id="login-cpf" placeholder="00000000000" maxlength="11">
+            </div>
+            <button class="btn btn-primary btn-block" onclick="loginCliente()">Entrar no Portal →</button>
+        </div>
+        <div id="perfil-cliente-view" style="display:none;"></div>
+    </div>
+</section>
+
+</main>
+
+<!-- ═══════════════ MODAIS ═══════════════ -->
+
+<!-- MODAL: NOVO PRODUTO (ESTOQUE) -->
+<div id="modal-novo-item" class="modal">
+    <button class="modal-close" onclick="closeModals()">✕</button>
+    <h3>Cadastrar Produto</h3>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Nome do Produto</label>
+            <input type="text" id="est-nome" placeholder="Ex: Ração Golden">
+        </div>
+        <div class="form-group">
+            <label>Categoria</label>
+            <select id="est-categoria">
+                <option value="alimento">🦴 Alimentação</option>
+                <option value="higiene">🧼 Higiene & Saúde</option>
+                <option value="acessorio">🎀 Acessórios</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Quantidade Inicial</label>
+            <input type="number" id="est-qtd" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+            <label>Qtd. Mínima (alerta)</label>
+            <input type="number" id="est-min" placeholder="5" min="1">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Preço de Venda (R$)</label>
+            <input type="number" id="est-preco" placeholder="0,00" step="0.01">
+        </div>
+        <div class="form-group">
+            <label>Ícone (emoji)</label>
+            <input type="text" id="est-icon" placeholder="🦴">
+        </div>
+    </div>
+    <button class="btn btn-primary btn-block" onclick="salvarEstoque()">Cadastrar Produto</button>
+</div>
+
+<!-- MODAL: EDITAR QUANTIDADE -->
+<div id="modal-editar-item" class="modal">
+    <button class="modal-close" onclick="closeModals()">✕</button>
+    <h3>Atualizar Estoque</h3>
+    <input type="hidden" id="edit-id">
+    <div class="form-group">
+        <label>Nome do Produto</label>
+        <input type="text" id="edit-nome" disabled style="background:#f5f5f5; color:#888;">
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Nova Quantidade</label>
+            <input type="number" id="edit-qtd" min="0">
+        </div>
+        <div class="form-group">
+            <label>Novo Preço (R$)</label>
+            <input type="number" id="edit-preco" step="0.01">
+        </div>
+    </div>
+    <button class="btn btn-primary btn-block" onclick="salvarEdicaoEstoque()">Salvar Alterações</button>
+</div>
+
+<!-- MODAL: PAGAMENTO -->
+<div id="modal-pagamento" class="modal">
+    <button class="modal-close" onclick="closeModals()">✕</button>
+    <h3>Finalizar Pagamento</h3>
+    <div style="text-align:center; margin-bottom:18px;">
+        <span style="font-family:'DM Serif Display',serif; font-size:2rem; color:var(--primary-dark);" id="pag-valor-txt"></span>
+    </div>
+
+    <div id="pag-opcoes">
+        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px;">Selecione a forma de pagamento</p>
+        <div class="pag-metodos">
+            <button class="pag-btn" onclick="telaMetodo('PIX')"><span class="pag-icon">💠</span>PIX</button>
+            <button class="pag-btn" onclick="telaMetodo('Cartão')"><span class="pag-icon">💳</span>Cartão</button>
+            <button class="pag-btn" onclick="telaMetodo('Dinheiro')"><span class="pag-icon">💵</span>Dinheiro</button>
+        </div>
+    </div>
+
+    <div id="metodo-pix" style="display:none; text-align:center;">
+        <div class="qr-wrap">
+            <div class="qr-mock">
+                <svg width="160" height="160" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0h7v7H0zm2 2v3h3V2zm1 1h1v1H3zm4-3h1v1H7zm1 1h2v1H8zm1 1h1v3H9zm-1 2h1v1H8zm-8 5h1v1H0zm2 0h2v1H2zm3 0h1v2H5zm2 0h1v1H7zm4 0h1v1h-1zm2 0h3v1h-3zm4 0h2v1h-2zm3 0h2v2h-2zm-12 1h1v2h-1zm4 0h1v1h-1zm1 0h1v1h-1zm2 0h1v1h-1zm1 0h2v1h-2zm2 0h1v1h-1zm-13 1h1v1H1zm2 0h1v1H3zm2 0h1v1H5zm6 0h2v1h-2zm3 0h1v1h-1zm4 0h2v1h-2zm3 0h1v1h-1zm-19 1h1v1H0zm4 0h2v1H4zm5 0h1v1H9zm1 0h1v2h-1zm2 0h1v1h-1zm3 0h1v1h-1zm1 0h2v1h-2zm3 0h2v1h-2zm-15 1h1v1H2zm2 0h1v1H4zm7 0h1v1h-1zm5 0h2v1h-2zm4 0h1v2h-1zm2 0h1v1h-1zm-21 1h7v7H0zm2 2v3h3V2zm1 1h1v1H3zm5-2h1v1H8zm2 0h1v1h-1zm2 0h1v1h-1zm1 0h2v1h-2zm3 0h1v1h-1zm2 0h1v1h-1zm2 0h3v1h-3zm-13 1h1v1h-1zm2 0h2v1h-2zm3 0h1v2h-1zm4 0h1v1h-1zm1 0h1v1h-1zm2 0h2v1h-2zm1 0h1v1h-1zm-14 1h1v1h-1zm5 0h1v1H9zm4 0h1v1h-1zm2 0h1v1h-1zm5 0h1v1h-1zm1 0h1v1h-1zm2 0h1v1h-1zm-18 1h1v1H4zm3 0h1v1H7zm1 0h1v1H8zm3 0h1v1h-1zm1 0h2v1h-2zm4 0h1v1h-1zm1 0h1v1h-1zm3 0h2v1h-2zm-17 1h1v1H5zm4 0h1v1H9zm5 0h1v1h-1zm2 0h1v1h-1zm1 0h1v1h-1zm2 0h1v1h-1zm3 0h1v1h-1zm-16 1h2v1H6zm3 0h1v1H9zm2 0h2v1h-2zm3 0h1v1h-1zm2 0h2v1h-2zm4 0h1v1h-1z" fill="#000"/>
+                </svg>
+            </div>
+            <p style="font-size:0.82rem; color:var(--text-muted); margin-top:10px;">Escaneie o código para pagar</p>
+        </div>
+        <div style="font-size:0.8rem; background: var(--primary-light); padding:10px 14px; border-radius:8px; color:var(--primary-dark); margin-bottom:12px;">
+            Chave PIX: <strong>auqmia@petcare.com.br</strong>
+        </div>
+        <button class="btn btn-success btn-block" onclick="concluirVenda('PIX')">✅ Confirmar Recebimento</button>
+    </div>
+
+    <div id="metodo-cartao" style="display:none;">
+        <div class="form-group">
+            <label>Número de Parcelas</label>
+            <select id="cartao-parcelas"></select>
+        </div>
+        <div class="form-group">
+            <label>Bandeira</label>
+            <select id="cartao-bandeira">
+                <option>Visa</option><option>Mastercard</option><option>Elo</option><option>Amex</option>
+            </select>
+        </div>
+        <button class="btn btn-success btn-block" onclick="concluirVenda('Cartão')">✅ Confirmar Cartão</button>
+    </div>
+
+    <div id="metodo-dinheiro" style="display:none;">
+        <div class="form-group">
+            <label>Valor Entregue pelo Cliente (R$)</label>
+            <input type="number" id="dinheiro-pago" placeholder="0,00" oninput="calcularTroco()">
+        </div>
+        <div style="display:flex; justify-content:space-between; background:var(--bg); padding:12px 16px; border-radius:10px; margin:8px 0;">
+            <span style="font-weight:700;">Troco:</span>
+            <span id="troco-txt" style="font-weight:900; color:var(--primary-dark);">R$ 0,00</span>
+        </div>
+        <button class="btn btn-success btn-block" onclick="concluirVenda('Dinheiro')">✅ Confirmar Pagamento</button>
+    </div>
+</div>
+
+<!-- MODAL: AGENDA -->
+<div id="modal-agenda" class="modal">
+    <button class="modal-close" onclick="closeModals()">✕</button>
+    <h3>Novo Agendamento</h3>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Nome do Tutor</label>
+            <input type="text" id="ag-tutor" placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+            <label>CPF (11 dígitos)</label>
+            <input type="text" id="ag-cpf" placeholder="00000000000" maxlength="11">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Nome do Pet</label>
+            <input type="text" id="ag-pet" placeholder="Nome do animal">
+        </div>
+        <div class="form-group">
+            <label>Raça</label>
+            <input type="text" id="ag-raca" placeholder="Raça do animal">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Serviço</label>
+            <select id="ag-servico">
+                <option>Banho e Tosa</option>
+                <option>Consulta Médica</option>
+                <option>Vacina</option>
+                <option>Castração</option>
+                <option>Retorno</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Profissional</label>
+            <select id="ag-profissional">
+                <option value="">Selecione...</option>
+                <option>Dr. Roberto (Veterinário)</option>
+                <option>Dra. Juliana (Vacinas)</option>
+                <option>Lucas (Esteticista/Tosa)</option>
+                <option>Mariana (Banhista)</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Data e Hora</label>
+        <input type="datetime-local" id="ag-data">
+    </div>
+    <div class="form-group">
+        <label>Observações</label>
+        <input type="text" id="ag-obs" placeholder="Alergia a algum produto, temperamento do pet...">
+    </div>
+    <button class="btn btn-primary btn-block" onclick="salvarAgendamento()">Confirmar Agendamento</button>
+</div>
+
+<!-- MODAL: SUCESSO VENDA -->
+<div id="modal-sucesso" class="modal" style="text-align:center;">
+    <div style="font-size:3.5rem; margin-bottom:10px;">✅</div>
+    <h3 style="font-size:1.5rem;">Venda Concluída!</h3>
+    <p id="sucesso-detalhe" style="color:var(--text-muted); font-size:0.85rem; margin:10px 0 20px;"></p>
+    <button class="btn btn-primary btn-block" onclick="closeModals()">Fechar</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
