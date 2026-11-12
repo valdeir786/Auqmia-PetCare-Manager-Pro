@@ -2,6 +2,8 @@
 
 **Meu primeiro projeto acadêmico | Desenvolvimento Web**
 
+Site:https://valdeir786.github.io/Auqmia-PetCare-Manager-Pro/
+
 ## 📌 Sobre o projeto
 
 O Auqmia – PetCare Manager Pro foi meu primeiro projeto acadêmico desenvolvido durante a graduação em Análise e Desenvolvimento de Sistemas na UNICID.
